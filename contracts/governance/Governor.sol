@@ -112,9 +112,25 @@ abstract contract Governor is Context, ERC165, EIP712, IGovernor {
     function state(uint256 proposalId) public view virtual override returns (ProposalState) {
         ProposalCore memory proposal = _proposals[proposalId];
 
-        if (proposal.executed) {
-            return ProposalState.Executed;
-        } else if (proposal.canceled) {
+        // if (proposal.executed) {
+        //     return ProposalState.Executed;
+        // } else if (proposal.canceled) {
+        //     return ProposalState.Canceled;
+        // } else if (proposal.voteStart.getDeadline() >= block.number) {
+        //     return ProposalState.Pending;
+        // } else if (proposal.voteEnd.getDeadline() >= block.number) {
+        //     return ProposalState.Active;
+        // } else if (proposal.voteEnd.isExpired()) {
+        //     return
+        //         _quorumReached(proposalId) && _voteSucceeded(proposalId)
+        //             ? ProposalState.Succeeded
+        //             : ProposalState.Defeated;
+        // } else {
+        //     revert("Governor: unknown proposal id");
+        // }
+
+        // BUG - if proposal is done will always return Succeeded even if executed
+        if (proposal.canceled) {
             return ProposalState.Canceled;
         } else if (proposal.voteStart.getDeadline() >= block.number) {
             return ProposalState.Pending;
@@ -125,6 +141,8 @@ abstract contract Governor is Context, ERC165, EIP712, IGovernor {
                 _quorumReached(proposalId) && _voteSucceeded(proposalId)
                     ? ProposalState.Succeeded
                     : ProposalState.Defeated;
+        } else if (proposal.executed) {
+            return ProposalState.Executed;
         } else {
             revert("Governor: unknown proposal id");
         }
