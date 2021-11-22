@@ -103,7 +103,9 @@ abstract contract Governor is Context, ERC165, EIP712, IGovernor {
         bytes[] memory calldatas,
         bytes32 descriptionHash
     ) public pure virtual override returns (uint256) {
-        return uint256(keccak256(abi.encode(targets, values, calldatas, descriptionHash)));
+        // BUG - can now call a successful proposal with different targets
+        return uint256(keccak256(abi.encode(values, calldatas, descriptionHash)));
+        // return uint256(keccak256(abi.encode(targets, values, calldatas, descriptionHash)));
     }
 
     /**
