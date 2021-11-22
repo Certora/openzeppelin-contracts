@@ -339,7 +339,9 @@ abstract contract Governor is Context, ERC165, EIP712, IGovernor {
         ProposalCore storage proposal = _proposals[proposalId];
         require(state(proposalId) == ProposalState.Active, "Governor: vote not currently active");
 
-        uint256 weight = getVotes(account, proposal.voteStart.getDeadline());
+        // uint256 weight = getVotes(account, proposal.voteStart.getDeadline());
+        // BUG - get the votes of current block number, can be flash loan attacked
+        uint256 weight = getVotes(account, block.number);
         _countVote(proposalId, account, support, weight);
 
         emit VoteCast(account, proposalId, support, weight, reason);
