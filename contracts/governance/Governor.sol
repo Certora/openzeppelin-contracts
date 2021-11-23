@@ -112,13 +112,15 @@ abstract contract Governor is Context, ERC165, EIP712, IGovernor {
     function state(uint256 proposalId) public view virtual override returns (ProposalState) {
         ProposalCore memory proposal = _proposals[proposalId];
 
+        // BUG - reduced the voting period to not include voteEnd block, if votePeriod is 1 we cant vote
         if (proposal.executed) {
             return ProposalState.Executed;
         } else if (proposal.canceled) {
             return ProposalState.Canceled;
         } else if (proposal.voteStart.getDeadline() >= block.number) {
             return ProposalState.Pending;
-        } else if (proposal.voteEnd.getDeadline() >= block.number) {
+        } else if (proposal.voteEnd.getDeadline() > block.number) {
+        // } else if (proposal.voteEnd.getDeadline() >= block.number) {
             return ProposalState.Active;
         } else if (proposal.voteEnd.isExpired()) {
             return
