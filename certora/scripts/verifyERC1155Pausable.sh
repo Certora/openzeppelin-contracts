@@ -6,6 +6,5 @@ certoraRun \
     --solc solc8.2 \
     --optimistic_loop \
     --loop_iter 3 \
-    --send_only \
     --cloud \
     --msg "ERC1155 Pausable verification all rules"
