@@ -1,7 +1,5 @@
 import "GovernorCountingSimple.spec"
 
-using ERC721VotesHarness as erc721votes
-
 /***
 ## Verification of `GovernorPreventLateQuorum`
 
