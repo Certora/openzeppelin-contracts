@@ -84,7 +84,7 @@ rule sequentialBurnsEquivalentToSingleBurnOfSum {
 }
 
 /// The result of burning a single token must be equivalent whether done via
-/// burn or burnBatch.
+/// `burn` or `burnBatch`.
 /// @title Single token `burn` / `burnBatch` equivalence
 rule singleTokenBurnBurnBatchEquivalence {
     storage beforeBurn = lastStorage;
